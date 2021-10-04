@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+    <apikit:config name="g13-api-config" api="resource::fb85daa0-14ed-4aac-adc3-7b5c57c7b14c:g13-api:1.0.3:raml:zip:g13-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <api-gateway:autodiscovery apiId="17312334" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="763462ef-2d9c-4b99-b98d-8adaaf653fed" flowRef="g13-api-main" />
+	<flow name="g13-api-main">
+        <http:listener path="/api/g13/*" config-ref="HTTP_Listener_config">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="g13-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="g13-api-console">
+        <http:listener path="/console/*" config-ref="HTTP_Listener_config">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="g13-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\inventory:application\json:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="ada09e7c-43f6-4be1-b129-442627306822" name="updateInventory"/>
+    </flow>
+    <flow name="put:\user:application\json:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="adbe8ef5-c65f-41a8-9c3f-d9d3e8d632a4" name="updateUser"/>
+    </flow>
+    <flow name="put:\orders\(orderid):application\json:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="fc52757a-a254-4285-9191-444aa50275ea" name="updateOrder"/>
+    </flow>
+    <flow name="delete:\user:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="fb04e85f-adb7-43ee-9e4a-953555668531" name="deleteUser"/>
+    </flow>
+    <flow name="delete:\user\wishlist:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="20ec033e-749e-47db-9546-3f36531556ae" name="deleteUserWishlist"/>
+    </flow>
+    <flow name="get:\inventory:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="220894d3-b74c-42f2-9215-0180d5da2b37" name="getInventory"/>
+    </flow>
+    <flow name="get:\orders:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="3c8a03fe-7180-454c-aa16-ce95a5de028a" name="getAllOrders"/>
+    </flow>
+    <flow name="get:\user:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="710d415e-ff90-4066-875e-5ab5312729bb" name="getUser"/>
+    </flow>
+    <flow name="get:\user\wishlist:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="da6135da-fd3a-42ab-a970-2b43d87b7fd0" name="getUserWishlist"/>
+    </flow>
+    <flow name="get:\orders\(orderid):g13-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="a05b116b-ab21-4614-99b5-804fb555f2ec" name="getOrderByID"/>
+    </flow>
+    <flow name="post:\inventory:application\json:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="291024ec-ac6f-40c6-a867-e31f7a7fb114" name="createInventoryItem"/>
+    </flow>
+    <flow name="post:\orders:application\json:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="4a000eae-51da-4bf2-8894-44d7edd5b19a" name="createOrder"/>
+    </flow>
+    <flow name="post:\user:application\json:g13-api-config">
+		<flow-ref doc:name="Flow Reference" doc:id="da2840f9-270a-4356-86c8-c5e1a7170ffa" name="createUser"/>
+    </flow>
+    <flow name="post:\user\wishlist:application\json:g13-api-config">
+        <flow-ref doc:name="Flow Reference" doc:id="a57b078b-aafb-48c0-89ad-147bb4d20337" name="createUserWishlist"/>
+    </flow>
+</mule>
