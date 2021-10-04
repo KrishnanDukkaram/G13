@@ -58,7 +58,7 @@
 						<password>${anypoint.password}</password>
 						<applicationName>${anypoint.applicationname}
 						</applicationName>
-						<environment>Sandbox</environment>
+						<environment>dev</environment>
 						<region>us-east-2</region>
 						<workers>1</workers>
 						<workerType>MICRO</workerType>
