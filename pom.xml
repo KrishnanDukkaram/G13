@@ -90,11 +90,6 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>com.mycompany</groupId>
-			<artifactId>ojdbc6-11.2.0.3</artifactId>
-			<version>0.1</version>
-		</dependency>
-		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.48</version>
