@@ -1,15 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
-	<configuration-properties doc:name="Configuration properties" doc:id="ffe0525a-cd9c-432d-91fd-2f2ba6068f89" file="config.yaml" />
-	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="5214cb02-6e1d-4f2f-b19f-bb961bfceb30" >
-		<http:listener-connection host="0.0.0.0" port="${http.port}" />
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="ffe0525a-cd9c-432d-91fd-2f2ba6068f89" file="config.yaml" />
+	<http:listener-config name="HTTP_Listener_config"
+		doc:name="HTTP Listener config"
+		doc:id="5214cb02-6e1d-4f2f-b19f-bb961bfceb30">
+		<http:listener-connection host="0.0.0.0"
+			port="${http.port}" />
 	</http:listener-config>
-	<db:config name="Database_Config" doc:name="Database Config" doc:id="f512c989-77e3-4da2-afb6-ec83ce12a146" >
-		<db:my-sql-connection host="${db.host}" port="${db.port}" user="${db.user}" password="${db.password}" database="${db.database}" />
+	<error-handler name="GlobalError_Handler">
+		<on-error-continue enableNotifications="true"
+			logException="true" doc:name="On Error Continue"
+			doc:id="2c208e81-01c2-4e82-8bd1-a4169cbe92b1" type="DB:CONNECTIVITY">
+			<ee:transform doc:name="Transform Message" doc:id="64b12507-0eae-47da-9f5f-c0bd6a0443cc" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "Unable to connect to database, Please try later" ++ error.description as String
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="cf574027-bf95-444d-ae40-2efaf21ac451" message="#[payload]"/>
+		
+</on-error-continue>
+		<on-error-continue enableNotifications="true"
+			logException="true" doc:name="On Error Continue"
+			doc:id="204a7297-11df-4c72-a3f7-dd7e70659fe1"
+			type="DB:QUERY_EXECUTION">
+			<ee:transform doc:name="Transform Message" doc:id="2cdac469-901f-4839-8e83-2e2b99683eb9">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "Unable to execute Query, Please try later" ++ error.description as String
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="e13baeae-e6a7-4940-93d3-4a4d2755ab90" message="#[payload]"/>
+		
+</on-error-continue>
+		<on-error-continue enableNotifications="true"
+			logException="true" doc:name="On Error Continue"
+			doc:id="f942fe58-36b9-46bb-a9f2-0551ffe8a633" type="ANY">
+			<ee:transform doc:name="Transform Message" doc:id="296e6927-9e24-44f5-bf1e-f6ae1529acf2">
+				<ee:message>
+					<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message" : "Unable to process request, Please try later" ++ error.description as String
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<logger level="INFO" doc:name="Logger" doc:id="cbdac475-4cdc-4542-98f5-4f3571b6e6cf" message="#[payload]"/>
+		
+</on-error-continue>
+
+
+	</error-handler>
+	<db:config name="Database_Config" doc:name="Database Config"
+		doc:id="f512c989-77e3-4da2-afb6-ec83ce12a146">
+		<db:my-sql-connection host="${db.host}"
+			port="${db.port}" user="${db.user}" password="${db.password}"
+			database="${db.database}" />
 	</db:config>
 </mule>

@@ -9,10 +9,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<db:config name="Database_Config1" doc:name="Database Config" doc:id="9be5c0db-1989-402b-80ec-f79fe7947d73" >
 		<db:my-sql-connection host="${db.host}" port="${db.port}" user="${db.user}" password="${db.password}" database="${db.database}" />
 	</db:config>
+	<configuration doc:name="Configuration" doc:id="a360455f-860e-4e85-8f39-eeff8b2a509b" defaultErrorHandler-ref="GlobalError_Handler" />
 	<flow name="getAllOrders" doc:id="bbc84f9a-859b-410a-a3df-ac8f3ce2056f" >
 		<logger level="INFO" doc:name="Logger" doc:id="afddb25e-3266-444c-b32e-0898979715b3" message="#[payload]"/>
 		<db:select doc:name="SelectOrders" doc:id="ed439df5-ff7e-4cc7-a9e2-5b5db41e1dcf" config-ref="Database_Config1">
-			<db:sql ><![CDATA[select o.orderid,o.userid,i.itemid,i.itemname from sql6441393.orders o join sql6441393.items i on o.itemid=i.itemid where o.userid = :userid]]></db:sql>
+			<db:sql ><![CDATA[select o.orderid,o.userid,i.itemid,i.itemname from sql6442783.orders o join sql6442783.items i on o.itemid=i.itemid where o.userid = :userid]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{'userid': attributes.queryParams.userid}]]]></db:input-parameters>
 		</db:select>
 		<ee:transform doc:name="Transform Message" doc:id="949124cc-bd41-4155-8632-bdceba3c965b" >
@@ -24,11 +25,13 @@ payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="14dbc5e4-978f-47b6-a798-87616736cc5b" message="#[payload]"/>
+		<error-handler ref="GlobalError_Handler" />
+		
 	</flow>
 	<flow name="getOrderByID" doc:id="a4d1f99c-c5d7-451f-a038-3218513519fe" >
 		<logger level="INFO" doc:name="Logger" doc:id="47f76a49-fce1-4329-8688-4bc927c2317e" message="#[payload]"/>
 		<db:select doc:name="SelectOrdersByID" doc:id="2235267e-4a34-40d7-8f74-95e3e64b4604" config-ref="Database_Config">
-			<db:sql><![CDATA[select o.orderid,o.userid,i.itemid,i.itemname from sql6441393.orders o join sql6441393.items i on o.itemid=i.itemid where o.orderid = :orderid]]></db:sql>
+			<db:sql><![CDATA[select o.orderid,o.userid,i.itemid,i.itemname from sql6442783.orders o join sql6442783.items i on o.itemid=i.itemid where o.orderid = :orderid]]></db:sql>
 			<db:input-parameters><![CDATA[#[{'orderid': attributes.uriParams.orderid}]]]></db:input-parameters>
 		</db:select>
 		<ee:transform doc:name="Transform Message" doc:id="23506128-dc54-4dc9-a55a-7138e5a23a0b" >
@@ -45,7 +48,7 @@ payload]]></ee:set-payload>
 		<logger level="INFO" doc:name="Logger" doc:id="adb2734e-4704-46b7-971f-801769e532c0" message="#[payload]"/>
 		<foreach doc:name="For Each" doc:id="b4c75553-02e6-47c8-a80e-b3125f4b6c76" collection="#[payload]">
 			<db:insert doc:name="Insert" doc:id="b302c5ec-7b4c-4f20-9c4f-68b82efa17b7" config-ref="Database_Config">
-			<db:sql><![CDATA[insert into sql6441393.orders(orderid,userid,itemid) values(:orderid,:userid,:itemid)]]></db:sql>
+			<db:sql><![CDATA[insert into sql6442783.orders(orderid,userid,itemid) values(:orderid,:userid,:itemid)]]></db:sql>
 			<db:input-parameters><![CDATA[#[{orderid : payload.orderid, userid : payload.userid, itemid : payload.itemid}]]]></db:input-parameters>
 		</db:insert>
 		</foreach>
@@ -64,7 +67,7 @@ output application/json
 	<flow name="updateOrder" doc:id="2089b5be-c8dc-4e69-885f-d25e0a4f6470" >
 		<logger level="INFO" doc:name="Logger" doc:id="fb2e6135-00da-4fa5-93ce-2c10f22b2958" message="#[payload]"/>
 		<db:update doc:name="Update" doc:id="5ddc6409-c8c4-41c7-a7ea-2ae5510d78a2" config-ref="Database_Config1">
-			<db:sql ><![CDATA[UPDATE sql6441393.orders SET orders.itemId = :newitemid WHERE orders.orderId = :orderid and orders.itemId = :itemid]]></db:sql>
+			<db:sql ><![CDATA[UPDATE sql6442783.orders SET orders.itemId = :newitemid WHERE orders.orderId = :orderid and orders.itemId = :itemid]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{orderid : payload.orderid, itemid : payload.itemid, newitemid: payload.newitemid}]]]></db:input-parameters>
 		</db:update>
 		<ee:transform doc:name="Transform Message" doc:id="d5eabb2e-3629-4e41-8420-f95901cb5e42" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
@@ -82,7 +85,7 @@ output application/json
 	<flow name="getUser" doc:id="9bd4294a-b6c7-4e28-ba33-c523bb8349f8">
 		<logger level="INFO" doc:name="Logger" doc:id="347acdfb-475e-40eb-8707-a8fbda4e9c08" message="#[payload]"/>
 		<db:select doc:name="SelectUser" doc:id="ba58174c-b30e-4eeb-8b0e-2cf84388d08b" config-ref="Database_Config1">
-			<db:sql><![CDATA[SELECT A.userId, A.fullName, A.emailAddress FROM sql6441393.users A WHERE A.userId = :userid]]></db:sql>
+			<db:sql><![CDATA[SELECT A.userId, A.fullName, A.emailAddress FROM sql6442783.users A WHERE A.userId = :userid]]></db:sql>
 			<db:input-parameters><![CDATA[#[{userid: attributes.queryParams.userid}]]]></db:input-parameters>
 		</db:select>
 		<ee:transform doc:name="Transform Message" doc:id="f5ff4d75-f705-4eec-aa94-b89642a2384b">
@@ -99,7 +102,7 @@ payload]]></ee:set-payload>
 		<logger level="INFO" doc:name="Logger" doc:id="2cc2bc6f-a4a4-4b78-8a54-20941c600a7a" message="#[payload]"/>
 		<foreach doc:name="For Each" doc:id="bff3f536-5123-4cdb-87dd-f703b0e0f924" >
 			<db:insert doc:name="Insert" doc:id="1baa1fe6-740b-4311-82d9-954bfa9cef5e" config-ref="Database_Config1">
-			<db:sql><![CDATA[insert into sql6441393.users(userId,fullName,emailAddress) values(:userId,:fullName,:emailAddress)]]></db:sql>
+			<db:sql><![CDATA[insert into sql6442783.users(userId,fullName,emailAddress) values(:userId,:fullName,:emailAddress)]]></db:sql>
 			<db:input-parameters><![CDATA[#[{userId : payload.userid, fullName : payload.name, emailAddress : payload.email}]]]></db:input-parameters>
 		</db:insert>
 		</foreach>
@@ -118,7 +121,7 @@ output application/json
 	<flow name="updateUser" doc:id="b3e376b6-af4e-410e-bb5e-7d85c40370ce" >
 		<logger level="INFO" doc:name="Logger" doc:id="b1d8fca2-575e-411e-8711-209f5b71a9f3" message="#[payload]"/>
 		<db:update doc:name="Update" doc:id="6f54bf6b-7ed0-43ab-92c8-f1e0488bdf23" config-ref="Database_Config1">
-			<db:sql ><![CDATA[UPDATE sql6441393.users SET users.fullName = :fullName, users.emailAddress = :emailAddress WHERE users.userid = :userId]]></db:sql>
+			<db:sql ><![CDATA[UPDATE sql6442783.users SET users.fullName = :fullName, users.emailAddress = :emailAddress WHERE users.userid = :userId]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{userId : payload.userid[0], fullName : payload.name[0], emailAddress : payload.email[0]}]]]></db:input-parameters>
 		</db:update>
 		<ee:transform doc:name="Transform Message" doc:id="f94f89b2-88de-4626-81dc-5a28c8d08e39" >
@@ -136,7 +139,7 @@ output application/json
 	<flow name="deleteUser" doc:id="ff1313d8-5953-4be1-96ff-27a17280f225" >
 		<logger level="INFO" doc:name="Logger" doc:id="b9a1d627-ac6f-4a5c-b66a-98b8df8bcb22" message="#[payload]"/>
 		<db:delete doc:name="Delete" doc:id="95d2e340-3e0b-45f6-ac8c-fcb06cf7e24f" config-ref="Database_Config1">
-			<db:sql ><![CDATA[DELETE FROM sql6441393.users WHERE users.userId = :userid]]></db:sql>
+			<db:sql ><![CDATA[DELETE FROM sql6442783.users WHERE users.userId = :userid]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{userid: attributes.queryParams.userid}]]]></db:input-parameters>
 		</db:delete>
 		<ee:transform doc:name="Transform Message" doc:id="82e658ee-3a1c-4e9a-9a1f-2e8a45a11e4b" >
@@ -154,7 +157,7 @@ output application/json
 	<flow name="getUserWishlist" doc:id="086f776f-5153-4abf-ae00-208dc36dec63" >
 		<logger level="INFO" doc:name="Logger" doc:id="5a387661-e4b9-4395-87d4-9bf8b84118b5" message="#[payload]"/>
 		<db:select doc:name="Select" doc:id="4185c8f1-03a1-452f-8dfb-d7ba5c1662b9" config-ref="Database_Config1">
-			<db:sql ><![CDATA[SELECT A.userId, A.itemId FROM sql6441393.wishlist A WHERE A.userId = :userid]]></db:sql>
+			<db:sql ><![CDATA[SELECT A.userId, A.itemId FROM sql6442783.wishlist A WHERE A.userId = :userid]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{userid: attributes.queryParams.userid}]]]></db:input-parameters>
 		</db:select>
 		<ee:transform doc:name="Transform Message" doc:id="578d91fe-d5b1-40c4-a99a-0af8253849a6" >
@@ -170,7 +173,7 @@ payload]]></ee:set-payload>
 	<flow name="createUserWishlist" doc:id="eb2e46d5-b60f-4094-a485-4a02f25b17d9" >
 		<logger level="INFO" doc:name="Logger" doc:id="1b9a607b-7e52-4e60-a66d-da821b55ca81" message="#[payload]"/>
 		<db:insert doc:name="Insert" doc:id="1c18be59-851e-4902-9ae5-3429f4708404" config-ref="Database_Config1">
-			<db:sql ><![CDATA[insert into sql6441393.wishlist(userId,itemId) values(:userid,:itemid)]]></db:sql>
+			<db:sql ><![CDATA[insert into sql6442783.wishlist(userId,itemId) values(:userid,:itemid)]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{userid: payload.userid, itemid: payload.itemid}]]]></db:input-parameters>
 		</db:insert>
 		<ee:transform doc:name="Transform Message" doc:id="b6456e9c-354e-42b5-b8bc-2591e717d2a4" >
@@ -188,7 +191,7 @@ output application/json
 	<flow name="deleteUserWishlist" doc:id="ae7c7b4e-7f63-4597-90b1-052a64b5ea3c" >
 		<logger level="INFO" doc:name="Logger" doc:id="d1e94044-1cca-4915-91dd-f62ee9249bdf" message="#[payload]"/>
 		<db:delete doc:name="Delete" doc:id="7a96e8ca-66bc-48cf-bfdc-f662745cfd75" config-ref="Database_Config1">
-			<db:sql ><![CDATA[DELETE FROM sql6441393.wishlist WHERE wishlist.userId = :userid AND wishlist.itemId = :itemid]]></db:sql>
+			<db:sql ><![CDATA[DELETE FROM sql6442783.wishlist WHERE wishlist.userId = :userid AND wishlist.itemId = :itemid]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{userid: attributes.queryParams.userid, itemid: attributes.queryParams.itemid}]]]></db:input-parameters>
 		</db:delete>
 		<ee:transform doc:name="Transform Message" doc:id="5e4d5ab7-d95a-45eb-85c5-339dd15ff3b6" >
@@ -206,7 +209,7 @@ output application/json
 	<flow name="getInventory" doc:id="72c0c446-f1e7-4989-8234-38d9accf6d53" >
 		<logger level="INFO" doc:name="Logger" doc:id="e23998a0-701c-4c01-b61f-c42171325300" message="#[payload]"/>
 		<db:select doc:name="Select" doc:id="ce9abfd1-7c71-45cc-a91c-264def9e36e4" config-ref="Database_Config1">
-			<db:sql ><![CDATA[SELECT A.itemId, A.itemName, A.price, A.inStock FROM sql6441393.items A WHERE A.itemId = :itemid]]></db:sql>
+			<db:sql ><![CDATA[SELECT A.itemId, A.itemName, A.price, A.inStock FROM sql6442783.items A WHERE A.itemId = :itemid]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{itemid: attributes.queryParams.itemid}]]]></db:input-parameters>
 		</db:select>
 		<ee:transform doc:name="Transform Message" doc:id="c0fec0d1-8e37-469c-ae85-c723aba32ce0" >
@@ -222,7 +225,7 @@ payload]]></ee:set-payload>
 	<flow name="createInventoryItem" doc:id="aa913194-4c74-449c-b83a-608f1be4e692" >
 		<logger level="INFO" doc:name="Logger" doc:id="fd86d8e6-1237-40e2-8b74-7d0a3636db36" message="#[payload]"/>
 		<db:insert doc:name="Insert" doc:id="7c4a015b-e8d3-4117-80ea-99376200916e" config-ref="Database_Config1">
-			<db:sql ><![CDATA[insert into sql6441393.items(itemId, itemName, price, inStock) values(:itemId,:itemName,:price,:inStock)]]></db:sql>
+			<db:sql ><![CDATA[insert into sql6442783.items(itemId, itemName, price, inStock) values(:itemId,:itemName,:price,:inStock)]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{itemId: payload.itemid, itemName: payload.name, price: payload.price, inStock: payload.stock}]]]></db:input-parameters>
 		</db:insert>
 		<ee:transform doc:name="Transform Message" doc:id="abeaea78-1b35-4913-961c-3c7fef7f09ae" >
@@ -240,7 +243,7 @@ output application/json
 	<flow name="updateInventory" doc:id="ffad3b4f-554c-4a3d-87be-151d10cad70a" >
 		<logger level="INFO" doc:name="Logger" doc:id="3c5497d8-1d5b-4618-aad4-987d7ac692af" message="#[payload]"/>
 		<db:update doc:name="Update" doc:id="e8dd5385-9ad5-4719-ae8b-b2013a1a5075" config-ref="Database_Config1">
-			<db:sql ><![CDATA[UPDATE sql6441393.items SET items.itemName = :itemName, items.price = :price, items.inStock = :inStock WHERE items.itemId = :itemId]]></db:sql>
+			<db:sql ><![CDATA[UPDATE sql6442783.items SET items.itemName = :itemName, items.price = :price, items.inStock = :inStock WHERE items.itemId = :itemId]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{itemId : payload.itemid, itemName : payload.name, price : payload.price, inStock: payload.stock}]]]></db:input-parameters>
 		</db:update>
 		<ee:transform doc:name="Transform Message" doc:id="80164031-36b8-4b7c-b59b-8b60ac277640" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" >
