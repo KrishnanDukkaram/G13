@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="Implementation-suite.xml" />
+	<munit:test name="getAllOrders-test" doc:id="f8264f44-f0b7-4ece-af79-c6d730abe1df" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="370eafad-3508-498b-b2e5-87a81f9abf4e" >
+				<munit:payload value="#[readUrl('classpath://getAllOrderstest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getAllOrderstest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getAllOrderstest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getAllOrders" doc:id="23048f27-4679-4893-bc30-6b271d1a104a" name="getAllOrders"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="b083e661-dd31-4648-baed-d38ec48e111e" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getAllOrderstest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="getOrderByID-test" doc:id="4ea58284-bbe3-4dec-92a1-c21592b8ae58" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="a47635ad-9331-4820-92d0-5f65aa86aa1d" >
+				<munit:payload value="#[readUrl('classpath://getOrderByIDtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getOrderByIDtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getOrderByIDtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getOrderByID" doc:id="02f1b743-a7a7-4e35-bc10-63b5ee4bc52b" name="getOrderByID"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="8206a16d-5698-4e71-8b6d-04db454258a9" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getOrderByIDtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="createOrder-test" doc:id="32e64347-93f2-4115-8ca4-af43c38d0c5d" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="9447427d-d893-459e-b629-15232d2430d1" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://createOrdertest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://createOrdertest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://createOrdertest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to createOrder" doc:id="2c488ed3-58e5-4c17-bce5-acc25326e7a9" name="createOrder"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="8ada3fc8-32d7-4eb4-9ac9-44c922ce0f16" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import createOrdertest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="getUser-test" doc:id="e464224d-dd6d-4eaf-9514-d6751bff8268" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="93ffb995-cef9-4de3-b58d-c0cf11e6c5c3" >
+				<munit:payload value="#[readUrl('classpath://getUsertest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getUsertest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getUsertest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getUser" doc:id="9906cef3-d493-4a99-b7ce-c16d7df68d20" name="getUser"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="ed10dca2-6d75-4e18-8afc-dd6e3027ce0d" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getUsertest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="createUser-test" doc:id="da8af953-5f78-4438-86fc-48db08805817" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="bce3635e-b5e2-491e-ad9c-c1f5e7d1dcef" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://createUsertest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://createUsertest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://createUsertest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to createUser" doc:id="22279fd6-c828-4fb2-b3a4-04b65fe47ed6" name="createUser"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="00977d6f-1363-44dc-8d9c-760f0663a028" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import createUsertest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="updateUser-test" doc:id="6cfe3021-5df3-447e-8590-d9d202b116b3" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="31509ed0-535c-4900-b1a7-aa4da2ad9c8a" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://updateUsertest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://updateUsertest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://updateUsertest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to updateUser" doc:id="fd5a2cd4-85b7-482f-abdf-747ceec875b1" name="updateUser"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="e0bc1a09-349f-47e8-a33b-123557543302" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import updateUsertest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="deleteUser-test" doc:id="8be3f79c-5b96-4ad9-b436-f61e1a13f667" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="6752aac5-2d41-486e-ba8b-49c009a621ae" >
+				<munit:payload value="#[readUrl('classpath://deleteUsertest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://deleteUsertest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://deleteUsertest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to deleteUser" doc:id="9283d4eb-38b4-40a9-919a-477cbdc3d541" name="deleteUser"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="2cbbee49-1ee7-41bf-8d14-0f555ecef054" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import deleteUsertest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="getUserWishlist-test" doc:id="45a18531-15d8-4b05-8837-d85d27f9d391" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="a985ca58-cba8-46cb-bc47-2389b1344a32" >
+				<munit:payload value="#[readUrl('classpath://getUserWishlisttest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getUserWishlisttest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getUserWishlisttest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getUserWishlist" doc:id="a47706f1-ad3d-4090-b694-4bfdf274d64a" name="getUserWishlist"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="540f3f9a-7459-4ce5-9470-f641d23d1d74" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getUserWishlisttest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="createUserWishlist-test" doc:id="265e886a-498f-4ca2-aefc-f437976ea97f" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="4b63e37e-88df-43e8-9ba3-55fdfc841e04" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://createUserWishlisttest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://createUserWishlisttest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://createUserWishlisttest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to createUserWishlist" doc:id="a20c5df2-3434-46a0-800c-934571fd7890" name="createUserWishlist"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="d4be7655-4f9d-42e2-91af-c849029719fa" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import createUserWishlisttest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="deleteUserWishlist-test" doc:id="055e2434-2643-4eae-b775-21414acd9a4d" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="3cce3682-1654-4eb3-8cbd-e498ad0f620f" >
+				<munit:payload value="#[readUrl('classpath://deleteUserWishlisttest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://deleteUserWishlisttest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://deleteUserWishlisttest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to deleteUserWishlist" doc:id="e8b41b19-8a33-4e9d-b8c5-896c10924725" name="deleteUserWishlist"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="a089e4ab-3054-4949-bed7-10befee4d184" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import deleteUserWishlisttest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="getInventory-test" doc:id="7f116cdb-8b60-44cd-9ab4-796b27063dcc" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="c6a58245-fe11-4f74-95ed-7dd2580991e3" >
+				<munit:payload value="#[readUrl('classpath://getInventorytest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getInventorytest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getInventorytest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to getInventory" doc:id="24d14048-7138-4575-82fe-5d29b2807572" name="getInventory"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="68c7258a-f3d4-470b-9501-f8a8ec2c33b1" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getInventorytest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="createInventoryItem-test" doc:id="3ec460c8-0a90-478e-ac81-c5217cdd50e3" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="457f7a71-5c86-49f9-9a2f-ea809f6ae793" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://createInventoryItemtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://createInventoryItemtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://createInventoryItemtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to createInventoryItem" doc:id="f2289d6f-0128-4b86-808b-4250cb630998" name="createInventoryItem"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="0190166c-b3e0-4190-919c-5c5c33552ae2" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import createInventoryItemtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="updateInventory-test" doc:id="a0d6058c-648f-427b-bf6a-e6b88822dc97" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="2e2de741-3131-48f3-9ffd-431d13c64191" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://updateInventorytest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://updateInventorytest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://updateInventorytest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to updateInventory" doc:id="218fd2b4-e977-48f9-9e7b-ecf9e6f50c62" name="updateInventory"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="29e3ddf2-76f5-432a-a31a-c5ee430e9f10" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import updateInventorytest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="updateOrder-test" doc:id="cb7e9f6a-aee6-4065-bd02-3bff3dd54eec" >
+		<munit:behavior >
+			<munit:set-event doc:name="Set Input" doc:id="cbc21397-665e-4eb7-85b1-e8856dad6763" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://updateOrdertest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://updateOrdertest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://updateOrdertest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to updateOrder" doc:id="73cadab8-3bc0-4752-9a32-4c02ede25e11" name="updateOrder"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="b2fc8d27-3fe0-4919-b9fb-68086333224d" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import updateOrdertest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

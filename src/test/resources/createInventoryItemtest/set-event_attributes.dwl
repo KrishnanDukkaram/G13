@@ -1,0 +1,30 @@
+{
+  "headers": {
+    "client_id": "f96a63d705d646cca4f8d7d0db98bcb0",
+    "client_secret": "944b7C4730684d3E8518b1dFe1D0b0A0",
+    "content-type": "application/json",
+    "user-agent": "PostmanRuntime/7.28.4",
+    "accept": "*/*",
+    "postman-token": "e1496888-82d8-48dd-bd9a-d070e173484d",
+    "host": "localhost:8081",
+    "accept-encoding": "gzip, deflate, br",
+    "connection": "keep-alive",
+    "content-length": "87"
+  },
+  "clientCertificate": null,
+  "method": "POST",
+  "scheme": "http",
+  "queryParams": {},
+  "requestUri": "/api/g13/inventory",
+  "queryString": "",
+  "version": "HTTP/1.1",
+  "maskedRequestPath": "/inventory",
+  "listenerPath": "/api/g13/*",
+  "relativePath": "/api/g13/inventory",
+  "localAddress": "/127.0.0.1:8081",
+  "uriParams": {},
+  "rawRequestUri": "/api/g13/inventory",
+  "rawRequestPath": "/api/g13/inventory",
+  "remoteAddress": "/127.0.0.1:61055",
+  "requestPath": "/api/g13/inventory"
+}

@@ -1,0 +1,30 @@
+{
+  "headers": {
+    "client_id": "f96a63d705d646cca4f8d7d0db98bcb0",
+    "client_secret": "944b7C4730684d3E8518b1dFe1D0b0A0",
+    "content-type": "application/json",
+    "user-agent": "PostmanRuntime/7.28.4",
+    "accept": "*/*",
+    "postman-token": "4ceb97f6-cb87-4f74-9832-273186ad3cfb",
+    "host": "localhost:8081",
+    "accept-encoding": "gzip, deflate, br",
+    "connection": "keep-alive",
+    "content-length": "108"
+  },
+  "clientCertificate": null,
+  "method": "POST",
+  "scheme": "http",
+  "queryParams": {},
+  "requestUri": "/api/g13/user",
+  "queryString": "",
+  "version": "HTTP/1.1",
+  "maskedRequestPath": "/user",
+  "listenerPath": "/api/g13/*",
+  "relativePath": "/api/g13/user",
+  "localAddress": "/127.0.0.1:8081",
+  "uriParams": {},
+  "rawRequestUri": "/api/g13/user",
+  "rawRequestPath": "/api/g13/user",
+  "remoteAddress": "/127.0.0.1:57643",
+  "requestPath": "/api/g13/user"
+}
